@@ -8,7 +8,7 @@ self.addEventListener('install', function(event) {
       .then(function(cache) {
         console.log('[Service Worker] Precaching App Shell');
         cache.addAll([
-          '/',
+          './',
           './index.html',
           './src/js/app.js',
           './src/js/feed.js',
@@ -54,7 +54,7 @@ self.addEventListener('fetch', function(event) {
               return caches.open(CACHE_DYNAMIC_NAME)
                 .then(function(cache) {
                   if (event.request.url.startsWith("http")) {
-                    cache.put(event.request, res.clone());
+                    // cache.put(event.request, res.clone());
                   }
                   return res;
                 })
