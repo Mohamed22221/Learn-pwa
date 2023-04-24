@@ -1,5 +1,5 @@
-var CACHE_STATIC_NAME = "static-v6";
-var CACHE_DYNAMIC_NAME = "dynamic-v3";
+var CACHE_STATIC_NAME = "static-v13";
+var CACHE_DYNAMIC_NAME = "dynamic-v2";
 
 self.addEventListener("install", function (event) {
   console.log("[Service Worker] Installing Service Worker ...", event);
@@ -42,6 +42,48 @@ self.addEventListener("activate", function (event) {
   );
   return self.clients.claim();
 });
+
+// cash then network
+// self.addEventListener("fetch",  (event) => {
+//   var url = "https://httpbin.org/get";
+
+//   if (event.request.url.indexOf(url) > -1) {
+//     event.respondWith(
+//       caches.open(CACHE_DYNAMIC_NAME).then( (cache) => {
+//         return fetch(event.request).then( (res) => {
+//           if (event.request.url.startsWith("http")) {
+//             cache.put(event.request.url, res.clone());
+//           }
+//           return res;
+//         });
+//       })
+//     );
+//   } else {
+//     event.respondWith(
+//       caches.match(event.request).then( (response) => {
+//         if (response) {
+//           return response;
+//         } else {
+//           return fetch(event.request)
+//             .then(function (res) {
+//               return caches.open(CACHE_DYNAMIC_NAME).then(function (cache) {
+//                 if (event.request.url.startsWith("http")) {
+//                   cache.put(event.request.url, res.clone());
+//                 }
+//                 return res;
+//               });
+//             })
+//             .catch(function (err) {
+//               return caches.open(CACHE_STATIC_NAME).then(function (cache) {
+//                 return cache.match("./offline.html");
+//               });
+//             });
+//         }
+//       })
+//     );
+//   }
+// });
+
 //cashe with network
 // self.addEventListener("fetch", function (event) {
 //   event.respondWith(
