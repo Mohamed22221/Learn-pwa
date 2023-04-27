@@ -1,9 +1,8 @@
 importScripts("./src/js/idb.js");
 importScripts("./src/js/dbPromise.js");
 
-
-var CACHE_STATIC_NAME = "static-v8";
-var CACHE_DYNAMIC_NAME = "dynamic-v8";
+var CACHE_STATIC_NAME = "static-v14";
+var CACHE_DYNAMIC_NAME = "dynamic-v14";
 var STATIC_FILES = [
   "./",
   "./index.html",
@@ -22,8 +21,6 @@ var STATIC_FILES = [
   "https://fonts.googleapis.com/icon?family=Material+Icons",
   "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
 ];
-
-
 
 self.addEventListener("install", function (event) {
   console.log("[Service Worker] Installing Service Worker ...", event);
@@ -71,12 +68,15 @@ self.addEventListener("fetch", function (event) {
     event.respondWith(
       fetch(event.request).then(function (res) {
         var clonedRes = res.clone();
-      
-        clonedRes.json().then((data) => {
-          for (var key in data) {
-            writeData("posts" , data[key])
-          }
-        });
+        clearAllData("posts")
+          .then(() => {
+            return clonedRes.json();
+          })
+          .then((data) => {
+            for (var key in data) {
+              writeData("posts", data[key]);
+            }
+          });
         return res;
       })
     );
